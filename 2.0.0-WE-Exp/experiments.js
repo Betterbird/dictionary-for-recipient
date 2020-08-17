@@ -26,7 +26,7 @@ function getCardForEmail(emailAddress) {
         result.card = card;
       }
     } catch (ex) {
-      console.error(`Error fetching card from address book for ${emailAddress}`);
+      if (verbose) console.error(`Error fetching card from address book for ${emailAddress}`);
     }
   }
   if (verbose && !result.card) console.log(`No address book entry for ${emailAddress}`);
