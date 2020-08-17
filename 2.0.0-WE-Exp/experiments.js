@@ -25,8 +25,12 @@ function getCardForEmail(emailAddress) {
         result.book = ab;
         result.card = card;
       }
-    } catch (ex) { }
+    } catch (ex) {
+      console.error(`Error fetching card from address book for ${emailAddress}`);
+    }
   }
+  if (verbose && !result.card) console.log(`No address book entry for ${emailAddress}`);
+  if (verbose && result.book) console.log(`${emailAddress} served from address book ${result.book.dirName}`);
   return result;
 }
 
@@ -83,6 +87,7 @@ function setDictionary(window) {
     if (verbose) infoText = "Setting dictionary: No recipient specified";
     storeRecipient = "-";
   }
+  if (verbose) console.log(infoText);
 
   if (storeRecipient && storeRecipient != existingRecipient) {
     window.dictionaryForRecipient = storeRecipient;
