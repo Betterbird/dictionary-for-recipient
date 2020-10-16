@@ -26,7 +26,7 @@ function getCardForEmail(emailAddress) {
         result.card = card;
       }
     } catch (ex) {
-      if (verbose) console.error(`Error fetching card from address book for ${emailAddress}`);
+      if (verbose) console.error(`Error fetching card from address book ${ab.dirName} (remote: ${ab.isRemote}) for ${emailAddress}`);
     }
   }
   if (verbose && !result.card) console.log(`No address book entry for ${emailAddress}`);
