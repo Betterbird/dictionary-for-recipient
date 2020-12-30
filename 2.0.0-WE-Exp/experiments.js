@@ -139,7 +139,6 @@ function PrepareComposeWindow(window) {
 // Implements the functions defined in the experiments section of schema.json.
 var DictionaryForRecipient = class extends ExtensionCommon.ExtensionAPI {
   getAPI(context) {
-    context.callOnClose(this);
     return {
       DictionaryForRecipient: {
         addComposeWindowListener(dummy) {
@@ -156,7 +155,7 @@ var DictionaryForRecipient = class extends ExtensionCommon.ExtensionAPI {
     };
   }
 
-  close() {
+  onShutdown(isAppShutdown) {
     ExtensionSupport.unregisterWindowListener(EXTENSION_NAME);
   }
 };
