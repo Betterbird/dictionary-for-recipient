@@ -1,5 +1,4 @@
-// This Source Code Form is subject to the terms of the
-// GNU General Public License, version 3.0.
+// Copyright (c) 2015, Jörg Knobloch. All rights reserved.
 
 /* global ExtensionCommon */
 
