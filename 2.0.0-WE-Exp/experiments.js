@@ -95,11 +95,13 @@ function setDictionary(window) {
 
   if (infoText) {
     var statusText = window.document.getElementById("statusText");
-    statusText.label = infoText;
+    // statusText.label = infoText;  // TB 68
     statusText.setAttribute("value", infoText);  // TB 70 and later, bug 1577659.
+    statusText.textContent = infoText;  // Statusbar as HTML.
     window.setTimeout(() => {
-      statusText.label = "";
+      // statusText.label = "";  // TB 68
       statusText.setAttribute("value", "");  // TB 70 and later, bug 1577659.
+      statusText.textContent = "";  // Statusbar as HTML.
     }, 2000);
   }
 }
