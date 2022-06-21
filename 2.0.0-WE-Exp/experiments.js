@@ -5,6 +5,7 @@
 const { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
 const { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
 var { ExtensionSupport } = ChromeUtils.import("resource:///modules/ExtensionSupport.jsm");
+var { AppConstants } = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
 
 const EXTENSION_NAME = "JorgK@dictionaryforrecipient";
 
@@ -75,6 +76,11 @@ function setDictionary(window) {
       if (dict) {
         infoText = `${firstRecipient} -> ${dict}`;
         storeRecipient = firstRecipient;
+        if (parseInt(AppConstants.MOZ_APP_VERSION, 10) >= 102) {
+          // From 102 onwards we can have multiple languages.
+          // Switch them all off before setting our own.
+          window.gActiveDictionaries = new Set();
+        }
         var changeEvent = { target: { value: dict }, stopPropagation() {} };
         window.ChangeLanguage(changeEvent);
       } else {
