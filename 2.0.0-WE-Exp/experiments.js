@@ -116,16 +116,25 @@ function setListener1(window, target, on) {
   // Use closure to carry 'window' and 'on' into the callback function.
   var listener1 = function (evt) {
     if (verbose) console.log(`received event ${on}`);
-    // Sadly, when focussing on the subject, the language change doesn't work, if we fire too early.
-    // Also, when replying to an e-mail, the recipient sometimes cannot be retrieved, if we fire too early.
-    // So wait 500 milliseconds.
-    // Note Sept. 2017: Strange things happen: The language indicators switch to the new language
-    // but the body remains in the original (default) language. This only happens on the first reply
-    // after application start when quoted text is used.
-    // Experiments showed that even 1100 ms were not enough, 1300 ms seemed to work.
-    window.setTimeout(() => {
+    // We can only set new dictionaries after the initial spell check
+    // triggered by switching on the inline spell checker is finished.
+    if (!window.gSpellCheckingEnabled) {
       setDictionary(window);
-    }, 1300);
+    } else {
+      (function setDict() {
+        if (verbose) console.log(`We can switch dictionaries now: ${window.checkerReadyObserver_Dict_for_recipient_add_on.isReady()}`);
+        if (window.checkerReadyObserver_Dict_for_recipient_add_on.isReady()) {
+          window.checkerReadyObserver_Dict_for_recipient_add_on.removeObserver();
+          // In theory, a furthter timeout shouldn't be necessary here any more :-(
+          // Observed behaviour is that it still fails one out of seven without the timeout.
+          window.setTimeout(() => {
+            setDictionary(window);
+          }, 500);
+        } else {
+          window.setTimeout(setDict, 100);
+        }
+      }());
+    }
   };
   target.addEventListener(on, listener1);
 }
@@ -135,12 +144,56 @@ function setListener1(window, target, on) {
  */
 function PrepareComposeWindow(window) {
   if (verbose) console.log("Preparing compose window");
+  window.checkerReadyObserver_Dict_for_recipient_add_on = {
+    _topic: "inlineSpellChecker-spellCheck-ended",
+    _isReady: false,
+
+    observe(aSubject, aTopic, aData) {
+      if (aTopic != this._topic) {
+        return;
+      }
+      this._isReady = true;
+      if (verbose) console.log(`checkerReadyObserver_Dict_for_recipient_add_on.observe triggered: ${this._isReady}`);
+    },
+
+    _isAdded: false,
+
+    addObserver() {
+      if (this._isAdded) {
+        return;
+      }
+
+      Services.obs.addObserver(this, this._topic);
+      this._isAdded = true;
+    },
+
+    removeObserver() {
+      if (!this._isAdded) {
+        return;
+      }
+
+      Services.obs.removeObserver(this, this._topic);
+      this._isAdded = false;
+      // this._isReady = false;
+    },
+
+    isReady() {
+      return this._isReady;
+    },
+  };
+  window.checkerReadyObserver_Dict_for_recipient_add_on.addObserver();
 
   window.dictionaryForRecipient = "-";
 
   // If these events arrive, we need to derive the dictionary again.
   setListener1(window, window.document.getElementById("msgSubject"), "focus");
   setListener1(window, window, "blur");
+}
+
+function CleanupComposeWindow(window) {
+  if (verbose) console.log("Cleaning up compose window");
+  window.checkerReadyObserver_Dict_for_recipient_add_on.removeObserver();
+  delete window.checkerReadyObserver_Dict_for_recipient_add_on;
 }
 
 // Implements the functions defined in the experiments section of schema.json.
@@ -156,6 +209,7 @@ var DictionaryForRecipient = class extends ExtensionCommon.ExtensionAPI {
             chromeURLs: ["chrome://messenger/content/messengercompose/messengercompose.xul",
               "chrome://messenger/content/messengercompose/messengercompose.xhtml"],
             onLoadWindow: PrepareComposeWindow,
+            onUnloadWindow: CleanupComposeWindow,
           });
         },
       },

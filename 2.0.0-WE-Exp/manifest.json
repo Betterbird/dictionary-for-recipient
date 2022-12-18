@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Dictionary for recipient",
   "description": "Sets the spell check dictionary based on the recipient",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "author": "Jorg K",
   "applications": {
     "gecko": {
