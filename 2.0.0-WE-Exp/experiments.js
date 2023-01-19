@@ -38,6 +38,11 @@ function getDictForAddress(address) {
   var cardDetails = getCardForEmail(address);
   if (!cardDetails.card) return null;
   var dict = cardDetails.card.getProperty("Custom4", "");
+  if (!dict) {
+    try {
+      dict = cardDetails.card.vCardProperties.getFirstValue("x-custom4");
+    } catch (ex) {}
+  }
   return dict;
 }
 
