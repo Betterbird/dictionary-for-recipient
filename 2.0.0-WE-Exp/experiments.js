@@ -2,7 +2,7 @@
 
 /* global ExtensionCommon */
 
-const { Services } = ChromeUtils.import("resource://gre/modules/Services.jsm");
+var Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
 const { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
 var { ExtensionSupport } = ChromeUtils.import("resource:///modules/ExtensionSupport.jsm");
 var { AppConstants } = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
