@@ -130,7 +130,7 @@ function setListener1(window, target, on) {
         if (verbose) console.log(`We can switch dictionaries now: ${window.checkerReadyObserver_Dict_for_recipient_add_on.isReady()}`);
         if (window.checkerReadyObserver_Dict_for_recipient_add_on.isReady()) {
           window.checkerReadyObserver_Dict_for_recipient_add_on.removeObserver();
-          // In theory, a furthter timeout shouldn't be necessary here any more :-(
+          // In theory, a further timeout shouldn't be necessary here any more :-(
           // Observed behaviour is that it still fails one out of seven without the timeout.
           window.setTimeout(() => {
             setDictionary(window);
