@@ -2,10 +2,9 @@
 
 /* global ExtensionCommon */
 
-var Services = globalThis.Services || ChromeUtils.import("resource://gre/modules/Services.jsm").Services;
-const { MailServices } = ChromeUtils.import("resource:///modules/MailServices.jsm");
-var { ExtensionSupport } = ChromeUtils.import("resource:///modules/ExtensionSupport.jsm");
-var { AppConstants } = ChromeUtils.import("resource://gre/modules/AppConstants.jsm");
+const { MailServices } = ChromeUtils.importESModule("resource:///modules/MailServices.sys.mjs");
+var { ExtensionSupport } = ChromeUtils.importESModule("resource:///modules/ExtensionSupport.sys.mjs");
+var { AppConstants } = ChromeUtils.importESModule("resource://gre/modules/AppConstants.sys.mjs");
 
 const EXTENSION_NAME = "JorgK@dictionaryforrecipient";
 

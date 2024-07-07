@@ -2,13 +2,13 @@
   "manifest_version": 2,
   "name": "Dictionary for recipient",
   "description": "Sets the spell check dictionary based on the recipient",
-  "version": "2.3.2",
+  "version": "2.4.0",
   "author": "Jorg K",
   "applications": {
     "gecko": {
       "id": "JorgK@dictionaryforrecipient",
-      "strict_min_version": "102.0",
-      "strict_max_version": "115.*"
+      "strict_min_version": "128.0",
+      "strict_max_version": "128.*"
     }
   },
   "experiment_apis": {
