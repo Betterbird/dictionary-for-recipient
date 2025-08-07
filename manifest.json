@@ -2,13 +2,14 @@
   "manifest_version": 2,
   "name": "Dictionary for recipient",
   "description": "Sets the spell check dictionary based on the recipient",
-  "version": "2.4.0",
-  "author": "Jorg K",
+  "version": "2.4.1",
+  "author": "The Betterbird Project, Jörg Knobloch",
+  "homepage_url": "https://github.com/Betterbird/dictionary-for-recipient",
   "applications": {
     "gecko": {
       "id": "JorgK@dictionaryforrecipient",
       "strict_min_version": "128.0",
-      "strict_max_version": "128.*"
+      "strict_max_version": "142.*"
     }
   },
   "experiment_apis": {
